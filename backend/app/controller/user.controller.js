@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken")
-const jwtSecret = env.JWT_SECRET;
+const { jwtSecret } = require("../config/controller.config")
 const mongoose = require("mongoose");
 const { userModel } = require("../model/user.model")
 

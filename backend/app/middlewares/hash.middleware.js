@@ -1,14 +1,10 @@
-const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+const { salt, iterations, keyLength, digest} = require("../config/hash.config")
+
 
 async function authenticatePassword(password, hashedPassword){
-    try{
-        const match = await bcrypt.compare(password, hashedPassword);
-        return match
-    } catch(err){
-        console.log("Error comparing passwords");
-        console.error(err);
-        return false;
-    }
+    const inputHash = crypto.pbkdf2Sync(password, salt, iterations, keyLength, digest).toString('hex'); 
+  return inputHash === hashedPassword;;
 }
 
 
