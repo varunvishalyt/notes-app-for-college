@@ -1,13 +1,12 @@
-const crypto = require("crypto");
-const { salt, iterations, keyLength, digest} = require("../config/hash.config")
+const argon2 = require("argon2");
 
-
-async function authenticatePassword(password, hashedPassword){
-    const inputHash = crypto.pbkdf2Sync(password, salt, iterations, keyLength, digest).toString('hex'); 
-  return inputHash === hashedPassword;;
+async function hashThePassword(req, res, next) {
+    const hashedPassword = await argon2.hash(req.password);
+    req.hashedPassword = hashedPassword;
+    next();    
 }
 
 
 module.exports = {
-    authenticatePassword
+    hashThePassword
 }

@@ -1,7 +1,5 @@
-const { generateHashedPassword } = require("../controller/hash.controller");
-// const jwt = require("jsonwebtoken")
-// const { jwtSecret } = require("../config/controller.config");
-const { userModel } = require("../model/user.model")
+const { userModel } = require("../model/user.model");
+
 
 
 function signinJWT(req, res, next){
@@ -16,10 +14,20 @@ function signinJWT(req, res, next){
 }
 
 async function validateUser(req, res, next){
+    // Implement a function to verify the hashed passwords
+    console.log(req.hashedPassword);
 
     const response = await userModel.find({ 
         username: req.username,
-     }).where('hashedPassword').equals(generateHashedPassword(req.password));
+     });
+
+    
+
+     if(!response){
+        res.send({
+            msg: "Incorrect crendentials!!!!!!! YOU'RE TRESPASSING!!!!!!!!"
+        });
+     }
 
 }
 
@@ -27,11 +35,19 @@ async function addUser(req, res, next){
     // Add the username and hashed password to the backend and return success or failure with the json message
     // Add OAUth gateway
     
-    await userModel.create({
+    const response = await userModel.create({
         username: req.username,
+        hashedPassword: req.hashedPassword,
         email: req.email,
+    });
 
-    })
+    console.log(response);
+
+    if(response){
+        res.send({
+            msg: "User added successfully"
+        });
+    }
 }
 
 module.exports = {
