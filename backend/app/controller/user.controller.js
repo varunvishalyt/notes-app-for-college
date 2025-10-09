@@ -1,6 +1,6 @@
-const jwt = require("jsonwebtoken")
-const { jwtSecret } = require("../config/controller.config")
-const mongoose = require("mongoose");
+const { generateHashedPassword } = require("../controller/hash.controller");
+// const jwt = require("jsonwebtoken")
+// const { jwtSecret } = require("../config/controller.config");
 const { userModel } = require("../model/user.model")
 
 
@@ -15,21 +15,12 @@ function signinJWT(req, res, next){
     })
 }
 
-//This function will (for now) check if the token is signed with the right secret and in the future it can check if the token is expired or not
-function checkAuthToken(req, res, next){
-    jwt.verify(req.token, jwtSecret, (err, decoded) => {
-        if(!decoded){
-            res.status(422).json({
-                msg: "Token invalid",
-                errorMessage: err
-            })
-        }
-        else{
-            res.json({
-                valid: true
-            })
-        }
-    });
+async function validateUser(req, res, next){
+
+    const response = await userModel.find({ 
+        username: req.username,
+     }).where('hashedPassword').equals(generateHashedPassword(req.password));
+
 }
 
 async function addUser(req, res, next){
@@ -45,6 +36,6 @@ async function addUser(req, res, next){
 
 module.exports = {
     signinJWT,
-    checkAuthToken,
+    validateUser,
     addUser
 }

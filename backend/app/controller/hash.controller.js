@@ -1,9 +1,9 @@
 const crypto = require("crypto");
 const { salt, iterations, keyLength, digest} = require("../config/hash.config")
 
-async function generateHashedPassword(params) {
+async function generateHashedPassword(plainTextPassword) {
     const hash = crypto.pbkdf25ync(
-        password,
+        plainTextPassword,
         salt,
         iterations,
         keyLength,
@@ -11,4 +11,8 @@ async function generateHashedPassword(params) {
     ).toString('hex');
     return hash;
     
+}
+
+module.exports = {
+    generateHashedPassword
 }

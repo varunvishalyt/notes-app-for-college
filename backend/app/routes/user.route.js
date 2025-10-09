@@ -9,7 +9,7 @@ router.get("/test", (req, res, next) =>{
         msg: "This is a test message"
     });
 })
-router.get("/signin", userMiddleware.validUser, userController.checkAuthToken);
+router.get("/signin", userMiddleware.validInputs, userController.validateUser);
 router.post("/signup", userMiddleware.validInputs, userController.addUser);
 
 
