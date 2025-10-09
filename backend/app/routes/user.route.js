@@ -12,4 +12,5 @@ router.get("/test", (req, res, next) =>{
 router.get("/signin", userMiddleware.validUser, userController.checkAuthToken);
 router.post("/signup", userMiddleware.validInputs, userController.addUser);
 
+
 module.exports = router
