@@ -1,34 +1,20 @@
 const { userModel } = require("../model/user.model");
+const jwt = require("jsonwebtoken");
+const { jwtSecret } = require("../config/controller.config");
+const argon2 = require("argon2");
 
-
-
-function signinJWT(req, res, next){
+function signinEndpoint(req, res, next){
     const payload = {
-        username: req.username
-    }
-    const token = jwt.sign(payload, jwtSecret);
-
-    res.json({
-        jwt: token
-    })
-}
-
-async function validateUser(req, res, next){
-    // Implement a function to verify the hashed passwords
-    console.log(req.hashedPassword);
-
-    const response = await userModel.find({ 
         username: req.username,
-     });
+        email: req.email
+    }
 
+    const token = jwt.sign(payload, jwtSecret);
     
-
-     if(!response){
-        res.send({
-            msg: "Incorrect crendentials!!!!!!! YOU'RE TRESPASSING!!!!!!!!"
-        });
-     }
-
+    res.json({
+        msg: "User was successfully signed in",
+        token: token
+    });
 }
 
 async function addUser(req, res, next){
@@ -41,8 +27,6 @@ async function addUser(req, res, next){
         email: req.email,
     });
 
-    console.log(response);
-
     if(response){
         res.send({
             msg: "User added successfully"
@@ -51,7 +35,6 @@ async function addUser(req, res, next){
 }
 
 module.exports = {
-    signinJWT,
-    validateUser,
+    signinEndpoint,
     addUser
 }

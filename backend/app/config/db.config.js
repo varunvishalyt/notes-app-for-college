@@ -2,5 +2,5 @@
 const env = require("dotenv");
 
 module.exports = {
-    dbUrl: env.DB_BASE_URL || "mongodb+srv://varunvishalyt:varun12345@cluster0.zfloyzx.mongodb.net/notes-app"
+    dbUrl: process.env.DB_URL || "mongodb://127.0.0.1:27017/notes-app"
 }
